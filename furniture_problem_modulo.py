@@ -33,6 +33,9 @@ res = model.addConstrs(
 # all quantities produced should be multiple of 3
 # =============================================================================
 
+make_multiple = model.addVars(products, vtype=GRB.INTEGER, name="make", lb=0, ub=30)
+
+model.addConstrs(make[p] == 3 * make_multiple[p] for p in products)
 
 # =============================================================================
 
