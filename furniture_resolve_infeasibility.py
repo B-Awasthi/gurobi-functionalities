@@ -35,14 +35,28 @@ model.optimize()
 # =============================================================================
 
 model.computeIIS()
-model.write("model.ilp")
 
+# Print out the IIS constraints and variables
+print("\nThe following constraints and variables are in the IIS:")
+for c in model.getConstrs():
+    if c.IISConstr:
+        print(f"\t{c.constrname}: {model.getRow(c)} {c.Sense} {c.RHS}")
+
+for v in model.getVars():
+    if v.IISLB:
+        print(f"\t{v.varname} ≥ {v.LB}")
+    if v.IISUB:
+        print(f"\t{v.varname} ≤ {v.UB}")
+
+model.write("model_infeasible.ilp")
+
+# resolve infeasibility - 1
 if model.status == GRB.INFEASIBLE:
     # model.feasRelaxS(1, True, False, True)
 
     ubpen = [0.1] * model.numVars
     model.feasRelax(
-        relaxobjtype=1,
+        relaxobjtype=2,
         minrelax=False,
         vars=model.getVars(),
         lbpen=None,
@@ -52,8 +66,12 @@ if model.status == GRB.INFEASIBLE:
     )
     model.optimize()
 
-# =============================================================================
+# resolve infeasibility - 2
+if model.status == GRB.INFEASIBLE:
+    model.feasRelaxS(relaxobjtype=2, minrelax=False, vrelax=True, crelax=True)
+    model.optimize()
 
+# =============================================================================
 
 # display solution
 for v in model.getVars():
