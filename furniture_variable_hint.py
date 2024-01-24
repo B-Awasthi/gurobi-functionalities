@@ -28,8 +28,16 @@ res = model.addConstrs(
 # variable hints
 # =============================================================================
 
-model.setAttr("VarHintVal", make["table"], 12)
-model.setAttr("VarHintVal", make["chair"], 26)
+# model.setAttr("VarHintVal", make["table"], 12)
+# model.setAttr("VarHintVal", make["chair"], 26)
+
+
+# =============================================================================
+# start values
+# =============================================================================
+
+model.setAttr("Start", make["table"], 14)
+model.setAttr("Start", make["chair"], 24)
 
 # =============================================================================
 
