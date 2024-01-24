@@ -35,6 +35,7 @@ res = model.addConstrs(
 
 model.params.PoolSolutions = 20
 model.params.PoolSearchMode = 2
+model.params.PoolGap = 0
 
 # =============================================================================
 
@@ -46,12 +47,17 @@ model.optimize()
 
 # enumerate best 20 solutions
 solution = {}
-for sol in range(20):
-    model.setParam(GRB.Param.SolutionNumber, sol)
+num_solutions = model.SolCount
+for sol in range(num_solutions):
+    # model.setParam(GRB.Param.SolutionNumber, sol)
+    model.Params.SolutionNumber = sol
     dv_values = model.Xn
     solution[sol] = {"X": dv_values, "obj_val": model.PoolObjVal}
 
 print(solution)
+
+print(model.PoolObjBound)
+
 # names_to_retrieve = [f"make[{p}]" for p in products]
 # variables = [model.getVarByName(name) for name in names_to_retrieve]
 
