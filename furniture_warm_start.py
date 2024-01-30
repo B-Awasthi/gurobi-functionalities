@@ -28,8 +28,24 @@ res = model.addConstrs(
 # warm start
 # =============================================================================
 
-model.setAttr("Start", make["table"], 14)
-model.setAttr("Start", make["chair"], 24)
+# Start attribute
+
+model.NumStart = 2
+model.update()
+
+# iterate over all MIP starts
+for s in range(model.NumStart):
+    model.params.StartNumber = s
+    if s == 0:
+        model.setAttr("Start", make["chair"], 22)
+    else:
+        model.setAttr("Start", make["table"], 14)
+        model.setAttr("Start", make["chair"], 24)
+
+
+# Variable Hints
+model.setAttr("VarHintVal", make["table"], 12)
+model.setAttr("VarHintVal", make["chair"], 22)
 
 # =============================================================================
 
