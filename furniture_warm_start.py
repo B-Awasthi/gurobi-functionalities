@@ -37,6 +37,7 @@ model.update()
 for s in range(model.NumStart):
     model.params.StartNumber = s
     if s == 0:
+        model.setAttr("Start", make["table"], 12)
         model.setAttr("Start", make["chair"], 22)
     else:
         model.setAttr("Start", make["table"], 14)
